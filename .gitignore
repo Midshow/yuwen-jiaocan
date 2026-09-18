@@ -1,3 +1,6 @@
+# 本机辅助（不入仓）
+publish_yuwen.sh
+
 # 凭据/密钥——绝不入仓
 flowus_auth.json
 flowus_cookies.json
