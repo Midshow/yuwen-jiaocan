@@ -65,6 +65,8 @@ def main():
 
     data = {'books': books, 'ke': ke_by_book, 'book_order': BOOK_ORDER}
     data_json = json.dumps(data, ensure_ascii=False)
+    # 防 </script> 提前闭合：JSON 内 '</' 安全转义（JS 字符串等价）
+    data_json = data_json.replace('</', '<\\/')
     print(f'节点数: {len(rows)} | JSON: {len(data_json.encode("utf-8"))//1024}KB')
 
     css = '''
@@ -107,6 +109,12 @@ def main():
     #content p { margin:8px 0; text-align:justify; }
     #content .h { font-weight:bold; color:#b45309; margin:16px 0 6px; }
     #content hr { border:none; border-top:1px dashed #cbd5e1; margin:14px 0; }
+    #toc-inner { background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:16px; }
+    .toc-title { font-weight:bold; color:#1d4ed8; margin-bottom:6px; font-size:13px; }
+    .toc-item { display:block; color:#2563eb; text-decoration:none; font-size:13px; padding:3px 0; border-bottom:1px dashed #dbeafe; }
+    .toc-item:hover { color:#1d4ed8; text-decoration:underline; background:#dbeafe; }
+    .h-highlight { animation: hl 2s ease; }
+    @keyframes hl { 0%{ background:#fef08a; } 100%{ background:transparent; } }
     #hint { color:#6b7280; text-align:center; margin-top:60px; font-size:15px; }
     #hint b { color:#2563eb; }
     '''
@@ -122,14 +130,36 @@ def main():
     function openSide(){ document.getElementById('side').classList.add('open'); document.getElementById('mask').style.display='block'; }
     function closeSide(){ document.getElementById('side').classList.remove('open'); document.getElementById('mask').style.display='none'; }
     function renderCrumbs(p){ return p.split('/').filter(Boolean).map(x=>esc(x)).join(' › '); }
-    function renderContent(c){
+    function isHeading(p){
+      if(p.length > 40) return false;
+      if(/^《.*》译文/.test(p)) return true;
+      if(/^[一二三四五六七八九十]+[、.．]/.test(p)) return true;
+      if(/^\\d+[.、．]/.test(p)) return true;
+      if(/^（[一二三四五六七八九十]+）/.test(p)) return true;
+      if(/^\([一二三四五六七八九十]+\)/.test(p)) return true;
+      return false;
+    }
+    function extractHeadings(c){
+      const heads = [];
+      let hidx = 0;
+      c.split('\\n').forEach(p=>{
+        p = p.trim();
+        if(!p) return;
+        if(isHeading(p)) heads.push({text:p, id:'h'+(hidx++)});
+      });
+      return heads;
+    }
+    function renderContent(c, heads){
+      let hidx = 0;
       const parts = c.split('\\n');
       return parts.map(p=>{
         p = p.trim();
         if(!p) return '';
         if(p === '---') return '<hr>';
-        if(/^《.*》译文/.test(p)) return '<div class="h">'+esc(p)+'</div>';
-        if(/^[一二三四五六七八九十]+[、.．]/.test(p) && p.length < 40) return '<div class="h">'+esc(p)+'</div>';
+        if(isHeading(p)){
+          const id = 'h' + (hidx++);
+          return '<div class="h" id="'+id+'">'+esc(p)+'</div>';
+        }
         return '<p>'+esc(p)+'</p>';
       }).join('');
     }
@@ -137,7 +167,21 @@ def main():
       cur = {book, unit, section, title: doc.t};
       document.getElementById('crumbs').innerHTML = renderCrumbs(doc.p);
       document.getElementById('title').textContent = doc.t;
-      document.getElementById('content').innerHTML = renderContent(doc.c);
+      const heads = extractHeadings(doc.c);
+      let tocHtml = '';
+      if(heads.length >= 2){
+        tocHtml = '<div id="toc-inner"><div class="toc-title">📑 本节目录（' + heads.length + ' 节）</div>' +
+          heads.map(h=>'<a class="toc-item" href="#'+h.id+'">'+esc(h.text)+'</a>').join('') + '</div>';
+      }
+      document.getElementById('content').innerHTML = tocHtml + renderContent(doc.c, heads);
+      // 本节目录点击 → 平滑滚动 + 高亮
+      document.querySelectorAll('#content .toc-item').forEach(a=>{
+        a.onclick = function(e){
+          e.preventDefault();
+          const el = document.getElementById(this.getAttribute('href').slice(1));
+          if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); el.classList.remove('h-highlight'); void el.offsetWidth; el.classList.add('h-highlight'); }
+        };
+      });
       document.getElementById('hint').style.display = 'none';
       document.getElementById('cur-book').textContent = book;
       document.querySelectorAll('#tree .node').forEach(n=>n.classList.remove('sel'));
