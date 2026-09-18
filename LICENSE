@@ -1,0 +1,34 @@
+# 代码：MIT License
+
+MIT License
+
+Copyright (c) 2026 Chen Houyi (陈厚亦)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+# 数据：学习用途授权（非 MIT）
+
+`flowus_data/高中语文教参.db` 及其衍生内容整理自
+人民教育出版社《普通高中语文教师教学用书》（统编版），版权归原出版社及原作者所有。
+
+- ✅ 允许：个人学习、班级教学、非商业研究
+- ❌ 禁止：商业用途、转售、去除版权信息后的再分发
+- 如权利人对内容有异议，请联系仓库维护者，将立即删除
