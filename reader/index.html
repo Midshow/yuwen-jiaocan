@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>高中语文教参库</title><style>__CSS__</style></head>
+<body>
+<header><button id="menu" aria-controls="side" aria-expanded="false">☰ 目录与搜索</button><strong>高中语文教参库</strong><label>字号 <select id="font" aria-label="正文字号"><option value="16">标准</option><option value="18">较大</option><option value="21">大字</option></select></label></header>
+<div id="mask" hidden></div>
+<aside id="side" aria-label="目录与搜索" hidden>
+  <div class="side-head"><button id="close" aria-label="关闭目录">✕</button><h2>查阅教参</h2><label for="search">篇名或关键词</label><input id="search" type="search" placeholder="劝学、赤壁赋、文学短评…"><label for="scope">检索范围</label><select id="scope"><option value="">全部五册</option></select><div id="books" role="group" aria-label="选择册目"></div><p id="count" role="status" aria-live="polite"></p></div>
+  <nav id="tree" aria-label="课文目录"></nav>
+</aside>
+<main><p id="crumbs"></p><h1 id="title" tabindex="-1">从目录选择课文</h1><div id="links" aria-label="关联内容"></div><p id="source"></p><div id="matches" hidden><span id="match-count"></span><button id="previous">上一个</button><button id="next">下一个</button></div><div id="toc"></div><article id="content"></article><p id="welcome">打开“目录与搜索”，选择册目和单元，或输入关键词查找。课文页面可直接进入参考译文和单元任务。</p></main>
+<footer>统编版《教师教学用书》 · 来源见各页标注 · 离线阅读</footer>
+<script id="library-data" type="application/json">__DATA__</script><script>__JS__</script>
+</body></html>
